@@ -1,0 +1,6 @@
+.lid filter=lfs diff=lfs merge=lfs -text
+.lld filter=lfs diff=lfs merge=lfs -text
+.dylib filter=lfs diff=lfs merge=lfs -text
+.dsymutil filter=lfs diff=lfs merge=lfs -text
+.unity filter=lfs diff=lfs merge=lfs -text
+.burst filter=lfs diff=lfs merge=lfs -text
