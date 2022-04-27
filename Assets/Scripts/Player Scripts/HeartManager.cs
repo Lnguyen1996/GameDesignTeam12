@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HeartManager : MonoBehaviour {
@@ -12,8 +13,21 @@ public class HeartManager : MonoBehaviour {
     public FloatValue heartContainers;
     public FloatValue playerCurrentHealth;
 
-	// Use this for initialization
-	void Start () {
+    [Header("New Scene Variables")]
+    public string sceneToLoad;
+    public Vector2 playerPosition;
+    public VectorValue playerStorage;
+    public Vector2 cameraNewMax;
+    public Vector2 cameraNewMin;
+    public VectorValue cameraMin;
+    public VectorValue cameraMax;
+
+    [Header("Transition Variables")]
+    public GameObject fadeInPanel;
+    public GameObject fadeOutPanel;
+    public float fadeWait;
+    // Use this for initialization
+    void Start () {
         InitHearts();
 	}
 
@@ -48,7 +62,30 @@ public class HeartManager : MonoBehaviour {
                 hearts[i].sprite = halfFullHeart;
             }
         }
-
+        if(tempHealth<=0)
+       {
+            playerCurrentHealth.RuntimeValue = 6;
+            StartCoroutine(FadeCo());
+        }
+        
     }
-
+    public IEnumerator FadeCo()
+    {
+        if (fadeOutPanel != null)
+        {
+            Instantiate(fadeOutPanel, Vector3.zero, Quaternion.identity);
+        }
+        yield return new WaitForSeconds(fadeWait);
+        ResetCameraBounds();
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneToLoad);
+        while (!asyncOperation.isDone)
+        {
+            yield return null;
+        }
+    }
+    public void ResetCameraBounds()
+    {
+        cameraMax.initialValue = cameraNewMax;
+        cameraMin.initialValue = cameraNewMin;
+    }
 }
